@@ -5,17 +5,20 @@ module.exports = {
     filename: './public/bundle.js',
   },
   resolve: {
-    root: __dirname,
     alias: {
     },
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
   },
   module: {
     loaders: [
       {
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015']
+          babelrc: false,
+          presets: ['react', 'es2015'],
+          plugins: [
+            ["transform-object-rest-spread"],
+          ],
         },
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/
