@@ -27635,7 +27635,23 @@ var WeatherMessage = __webpack_require__(247);
 var Weather = React.createClass({
   displayName: 'Weather',
 
+  getInitialState: function getInitialState() {
+    return {
+      location: 'Izmir',
+      temp: 34
+    };
+  },
+  handleSearch: function handleSearch(location) {
+    this.setState({
+      location: location,
+      temp: 23
+    });
+  },
   render: function render() {
+    var _state = this.state,
+        temp = _state.temp,
+        location = _state.location;
+
     return React.createElement(
       'div',
       null,
@@ -27644,8 +27660,8 @@ var Weather = React.createClass({
         null,
         'Weather Component'
       ),
-      React.createElement(WeatherForm, null),
-      React.createElement(WeatherMessage, null)
+      React.createElement(WeatherForm, { onSearch: this.handleSearch }),
+      React.createElement(WeatherMessage, { location: location, temp: temp })
     );
   }
 });
@@ -27708,20 +27724,30 @@ module.exports = Examples;
 var React = __webpack_require__(7);
 
 var WeatherForm = React.createClass({
-  displayName: "WeatherForm",
+  displayName: 'WeatherForm',
 
+  onFormSubmit: function onFormSubmit(e) {
+    e.preventDefault();
+
+    var location = this.refs.location.value;
+
+    if (location.length > 0) {
+      this.refs.location.value = '';
+      this.props.onSearch(location);
+    }
+  },
   render: function render() {
     return React.createElement(
-      "div",
+      'div',
       null,
       React.createElement(
-        "form",
-        null,
-        React.createElement("input", { type: "text" }),
+        'form',
+        { onSubmit: this.onFormSubmit },
+        React.createElement('input', { type: 'text', ref: 'location' }),
         React.createElement(
-          "button",
+          'button',
           null,
-          "Get Weather"
+          'Get Weather'
         )
       )
     );
@@ -27746,7 +27772,11 @@ var WeatherMessage = React.createClass({
     return React.createElement(
       'h3',
       null,
-      'It\'s 40 in New York.'
+      'It\'s ',
+      this.props.temp,
+      ' in ',
+      this.props.location,
+      '.'
     );
   }
 });
